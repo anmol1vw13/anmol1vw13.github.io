@@ -8,7 +8,7 @@
 layout: home
 ---
 
-Ola! I'm a techie, who has a keen sense of interest towards music and travelling.
+Ola! I'm Anmol Vijaywargiya, a techie, who has a keen sense of interest towards music and travelling.
 
 I currently work at [Gojek](https://www.go-jek.com/).
 
