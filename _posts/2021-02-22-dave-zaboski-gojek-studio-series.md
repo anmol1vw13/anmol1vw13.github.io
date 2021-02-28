@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Dave Zaboski
+title: Gojek Studio Speaker Series --- Dave Zaboski
 description: An inspiring talk by a famous Disney creator.
 date: '2021-02-22T12:00:00.000-08:00'
 author: Anmol Vijaywargiya
@@ -11,14 +11,14 @@ tags:
 - disney
 ---
 
-<b>Dave Zaboski's</b> talk was the first one in the Studio speaker series at <b>Gojek.</b>
+<a href="https://www.linkedin.com/in/davezaboski/">Dave Zaboski's</a> talk was the first one in the Studio speaker series at <b>Gojek.</b>
 
 He is a classically trained painter, illustrator and former Senior Animator with Disney, Sony and Warner Bros.
 He has drawn for such classic films as Beauty and the Beast, Aladdin, the Lion King, Pocahontas,
 The Hunchback of Notre Dame, Hercules, Tarzan, The Emperor's New Groove, Fantasia 2000 and more.
 
 His talk was impressive since his presentation was on Photoshop! Mind equals Blown right?
-Was inspiring particularly for the designers.
+It was inspiring particularly for the designers.
 
 Let's begin with the notes.
 
@@ -61,7 +61,7 @@ that's awesome too.
 * Power of creation comes from  "Knowing thy self". How you look shouldn't matter.
 * Innovation is purposeful creation.
 * How do you achieve the impossible?
-By creating something which is `impossible - 1` i.e. figure out what is that `impossible - 1` which could be a stepping stone towards achieving the impossible.
+By creating something which is `impossible - 1` i.e. figure out what that `impossible - 1` is, which could be a stepping stone towards achieving the impossible.
 
 #### Book Recommendations
 * The Gift - By Hafiz
