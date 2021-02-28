@@ -19,6 +19,12 @@ a {
   grid-template-columns: auto auto auto;
   padding: 10px;
 }
+
+.single-picture-container{
+  display: grid;
+  padding: 10px;
+}
+
 .grid-item {
   padding: 20px;
   text-align: center;
