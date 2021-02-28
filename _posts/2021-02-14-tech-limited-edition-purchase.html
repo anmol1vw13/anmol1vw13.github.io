@@ -51,19 +51,19 @@ which was going to be launched soon.</p>
 <p> All I needed was a script which continuously scraped the page and check for the tag being present.
   The moment the product comes in stock, the tag would go away and in such case, a notification needed to be sent. </p>
 
-<p> Wrote a python script to do the same </p>
+<p> Wrote a python script to do the same.</p>
 
 <script src="https://emgithub.com/embed.js?target=https%3A%2F%2Fgithub.com%2Fanmol1vw13%2Fscripts-py%2Fblob%2Fmaster%2Fnikeshoe_alerter.py&style=github&showFileMeta=on"></script>
 
 <p> The script uses two services.</p>
-<p> <b> <a ref="https://www.callmebot.com/blog/free-api-whatsapp-messages/">Call Me Bot</a> </b> for sending a whatsapp message</p>
-<p> <b> <a ref="https://wirepusher.com/">Wirepusher</a> </b> for sending a notification on your mobile</p>
+<p> <b> <a ref="https://www.callmebot.com/blog/free-api-whatsapp-messages/">Call Me Bot</a> </b> for sending a whatsapp message.</p>
+<p> <b> <a ref="https://wirepusher.com/">Wirepusher</a> </b> for sending a notification on your mobile.</p>
 <p>The links have detailed description on how to set up both of them.</p>
 
 <p>This script now had to be run on a machine and had to be run on regular intervals i.e. a cron had to be setup.</p>
 <p>I chose <a href="https://console.cloud.google.com/">GCP</a> to be the cloud platform. You could follow <a href="https://medium.com/google-cloud/creating-a-virtual-machine-in-google-cloud-platform-ec2d74dbbab0">this</a> article to get it done.</p>
 
-<p>Once the machine was up, I cloned the <a href="https://github.com/anmol1vw13/scripts-py">repository</a></p>
+<p>Once the machine was up, I cloned the <a href="https://github.com/anmol1vw13/scripts-py">repository.</a></p>
 
 <p> Only this left was to get the API Keys and set up a <a href="https://www.liquidweb.com/kb/create-a-cron-task-in-ubuntu-16-04/">cron</a> which ran every 2 minutes.</p>
 <code style="padding-bottom: 5px; padding-top: 5px">
