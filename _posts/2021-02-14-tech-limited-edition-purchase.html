@@ -1,0 +1,83 @@
+---
+layout: post
+title: How did I bag a limited edition Nike shoe?
+date: '2021-02-14T12:00:00.000-08:00'
+author: Anmol Vijaywargiya
+tags:
+- tech
+- nike
+- valentine
+- limited edition
+- notification bot
+- whatsapp message
+- call me bot
+---
+
+<p>I had recently gotten engaged and valentine's was around the corner. 🙈</p>
+
+<p>To make it memorable, I decided to get her something exclusive.</p>
+
+<p>My sister then got to know from a friend of her's about a valentine edition Nike shoe,
+which was going to be launched soon.</p>
+
+<div class="post-img">
+<img src="/assets/limited-edition-purchase/air-force-1-07-se-shoe-G0dtLG.jpg"/>
+</div>
+
+<p>I loved the idea of gifting a limited edition shoe. Since I had never purchased one myself before, the excitement to bag it was obvious.</p>
+
+<p>There was one problem though. Nike Limited Edition shoes have a reputation of going out of stock within hours of the launch.
+  Hence timing the purchase was going to be extremely crucial.</p>
+
+<p> It was 1st Feb and I was expecting the shoe to be launched by 6th of February. </p>
+
+<p>Monitoring [Nike](https://nike.com) continuously would have been time consuming and hence the first thing that struck me was -  If only  had a feature to notify about the launch 😓 </p>
+<p>Not being able to find any viable solution to this, I took it upon myself to make one.</p>
+
+<p>Firstly, I figured out if there's any difference between the pages of products available right now and the products yet to be launched!</p>
+
+<div class="grid-container">
+
+  <div class="grid-item"><img src="/assets/limited-edition-purchase/nike-in-stock.jpg"/><figcaption style="padding-top: 8px"> In Stock</figcaption></div>
+
+  <div class="grid-item"><img src="/assets/limited-edition-purchase/nike-coming-soon.jpg" style="float:right"/><figcaption> Yet to be launched</figcaption></div>
+</div>
+
+<p> The visible difference is the text <b>Coming Soon</b> not being present in the product which is in stock.</p>
+
+ <p> In HTML terms, this translated into a div with <i>data-text="comingSoon"`</i> not being present when product is in stock.</p>
+
+<p> All I needed was a script which continuously scraped the page and check for the tag being present.
+  The moment the product comes in stock, the tag would go away and in such case, a notification needed to be sent. </p>
+
+<p> Wrote a python script to do the same </p>
+
+<script src="https://emgithub.com/embed.js?target=https%3A%2F%2Fgithub.com%2Fanmol1vw13%2Fscripts-py%2Fblob%2Fmaster%2Fnikeshoe_alerter.py&style=github&showFileMeta=on"></script>
+
+<p> The script uses two services.</p>
+<p> <b> <a ref="https://www.callmebot.com/blog/free-api-whatsapp-messages/">Call Me Bot</a> </b> for sending a whatsapp message</p>
+<p> <b> <a ref="https://wirepusher.com/">Wirepusher</a> </b> for sending a notification on your mobile</p>
+<p>The links have detailed description on how to set up both of them.</p>
+
+<p>This script now had to be run on a machine and had to be run on regular intervals i.e. a cron had to be setup.</p>
+<p>I chose <a href="https://console.cloud.google.com/">GCP</a> to be the cloud platform. You could follow <a href="https://medium.com/google-cloud/creating-a-virtual-machine-in-google-cloud-platform-ec2d74dbbab0">this</a> article to get it done.</p>
+
+<p>Once the machine was up, I cloned the <a href="https://github.com/anmol1vw13/scripts-py">repository</a></p>
+
+<p> Only this left was to get the API Keys and set up a <a href="https://www.liquidweb.com/kb/create-a-cron-task-in-ubuntu-16-04/">cron</a> which ran every 2 minutes.</p>
+<code style="padding-bottom: 5px; padding-top: 5px">
+  */2 * * * * env MOBILE_NUMBER="#mobile_number" CALL_ME_BOT_KEY="#call_me_bot_key" WIRE_PUSHER_KEY="#wire_pusher_key" python /scripts-py/nikeshoe_alerter.py >> /log.py
+</code>
+
+<p style="padding-top: 15px;">All I now had to do was take the back seat and wait for the notification to arrive.👻</p>
+<p>Meanwhile, I got her home address from her sister and asked her to keep it a surprise. Not a single word! Sssshhhhhh 🤭</p>
+<p>Saved the address on nike to be swift like a cheetah during the sale 😎</p>
+<p>Having waited for 6+ days, we lost complete hope of the shoe being delivered on time, even if it became available.</p>
+<p> Nevertheless, all of us at home were on cloud nine when the notification came up on 8th of Feb!! The rush to order it was crazy.</p>
+<div class="post-img">
+  <img src="/assets/limited-edition-purchase/call_me_bot_notification.jpg"/>
+</div>
+<p>The feeling of bagging a limited edition shoe was amazing!!</p>
+<p>The shoe was arriving from Singapore and was being delivered by Aramex estimated to reach between 12th and 24th 🤐. Insane amount of buffer right?</p>
+<p>I went through the procedure to get it customs cleared and to our luck, it got delivered right on time, on 14th morning.</p>
+<p>She loved the shoes, which made my first valentine's day ever, although virtual, a huge success!!😋</p>

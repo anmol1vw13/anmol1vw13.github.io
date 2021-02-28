@@ -12,3 +12,31 @@ a {
 .home-avatar {
   text-align: center;
 }
+
+.post-img{
+  max-height: 30%;
+  max-width: 30%;
+  text-align: center;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  padding: 20px;
+  text-align: center;
+}
+
+.emgithub-container{
+  font-family: $base-font-family;
+  font-size: 14px;
+}
+
+code {
+  background-color: $color-code-background;
+  color: $color-code-color;
+  border-radius: 0.3rem;
+  padding: 4px 5px 5px;
+}
