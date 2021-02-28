@@ -5,8 +5,10 @@ author:
 description: > # this means to ignore newlines until "show_excerpts:"
   A place to jot down my thoughts and experiences.
 
-show_excerpts: false # set to true to show excerpts on the homepage
+repository: anmol1vw13/anmol1vw13.github.io
 
+show_excerpts: false # set to true to show excerpts on the homepage
+google_analytics: G-6C15KYCLVN
 disqus:
   shortname: anmolvijaywargiya
 # Minima date format
