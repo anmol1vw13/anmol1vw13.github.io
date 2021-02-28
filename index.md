@@ -12,7 +12,7 @@ Ola! I'm Anmol Vijaywargiya, a techie, who has a keen sense of interest towards 
 
 I currently work at [Gojek](https://www.go-jek.com/).
 
-Previously, I have worked at [Snapdeal](https://www.snapdeal.com) and [Perpule](https://www.perpule.com).
+Previously, I have worked for [Snapdeal](https://www.snapdeal.com) and [Perpule](https://www.perpule.com).
 
-Follow me on [instagram](https://www.instagram.com/travelsingmeme/) for my travel, music and meme collection.
+Follow me on <a href="https://www.instagram.com/travelsingmeme"> <svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg></a> for my travel, music and meme collection.
 

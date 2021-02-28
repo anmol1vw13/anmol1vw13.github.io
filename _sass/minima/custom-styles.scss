@@ -3,4 +3,12 @@
 a {
   text-decoration: underline;
   color: teal;
+  &,
+  &:visited {
+    color: teal;
+  }
+}
+
+.home-avatar {
+  text-align: center;
 }
