@@ -5,7 +5,7 @@ description: An inspiring talk by a famous Disney creator.
 date: '2021-02-22T12:00:00.000-08:00'
 author: Anmol Vijaywargiya
 tags:
-- talk_notes
+- notes
 - dave zaboski
 - designer
 - disney
