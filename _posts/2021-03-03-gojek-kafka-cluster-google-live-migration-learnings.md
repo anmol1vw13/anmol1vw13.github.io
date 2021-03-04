@@ -116,9 +116,10 @@ how long it took for their topic partition which was lead by `kafka-broker-13` t
 
 <div class="single-picture-container">
   <div class="grid-item">
-<img src="/assets/kafka-issue/broker-reelection-recovery-time.png" class="center" style="width:100%; height:100%"/>
-<figcaption>Leader count chart, which is a summation of all partitions from all the topics in the cluster.</figcaption>
-</div></div>
+    <img src="/assets/kafka-issue/broker-reelection-recovery-time.png" class="center" style="width:100%; height:100%"/>
+    <figcaption>Leader count chart, which is a summation of all partitions from all the topics in the cluster.</figcaption>
+  </div>
+</div>
 <br/>
 So, the next task in hand was to reproduce it on local or integration, so that we could try various kafka configuration settings in order to
 mitigate the issue. 
@@ -193,8 +194,8 @@ Following are the steps and observations
     <pre class="block-code-pre">
     <code class="block-code-code">./zookeeper-shell.sh localhost:2181 << get /controller</code></pre>
 * Exec into the broker's container found above and put a rule in the iptables to not accept requests from zookeeper
-   <pre class="block-code-pre">
-       <code class="block-code-code">iptables -A INPUT -s <zookeeper_ip> -j DROP</zookeeper_ip></code></pre>
+    <pre class="block-code-pre">
+    <code class="block-code-code">iptables -A INPUT -s <zookeeper_ip> -j DROP</zookeeper_ip></code></pre>
 * Observe that the new controller isn't elected even after waiting for 5 mins. Kudos to high value of ZOO_TICK_TIME.
 * Find a partition the leader of which isn’t the controller. This can be found using kafka-topics
     <pre class="block-code-pre">
@@ -243,7 +244,7 @@ do not die and start consuming messages once things come back to normal.
 Knowing that default.api.timeout.ms worked, we tested it out on integration and intimated all the stakeholders about it. Hurray!!
 
 Apart from figuring out the right consumer config, we realized that since live migration is the one creating all the fuss,
-we also updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
+we updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
 to be true. Shutdown and restart would mean a faster preferred election.
 Since Kafka is and highly available setup, one broker being down for a few minutes wouldn't have much effect.
 
@@ -252,11 +253,11 @@ Thus after a week of rigorous effort, we were FINALLY able to figure out a viabl
 ### The positives
 The last week of February was THE WEEK where we got to learn a lot about kafka. 
 
-This was also the week, were the whole team paired together all the time which in turn contributed to strengthening the bond. 
+This was also the week, were the whole team paired together all the time, which in turn contributed to strengthening the bond. 
 
 Kudos to such production issues!! 🤪
 
-## Helpful Pages
+## Helpful Links
 
 * [https://betterprogramming.pub/a-simple-apache-kafka-cluster-with-docker-kafdrop-and-python-cf45ab99e2b9](https://betterprogramming.pub/a-simple-apache-kafka-cluster-with-docker-kafdrop-and-python-cf45ab99e2b9)
 * [https://bravenewgeek.com/tag/leader-election/](https://bravenewgeek.com/tag/leader-election/)
