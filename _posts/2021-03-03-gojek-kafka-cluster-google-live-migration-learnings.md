@@ -33,17 +33,16 @@ While, there were two types of consumers facing the lag
 
 Why and how a live migration would be the culprit was still an big question mark! 👀
 
-There were a few speculations as to how a misbehaving broker could cause lags in consumers
-1. Could be to do with ack
+However, there were a few speculations as to how a misbehaving broker could cause lags in consumers
 1. Streams were stuck in re-balancing because one of the stream thread died and consumers 
 using kafka client less than 2.3.0 could be facing issues because of it. Refer [KAFKA-7181](https://issues.apache.org/jira/browse/KAFKA-7181)
 1. Consumers did not implement an UncaughtExceptionHandler and a encountering a Timeout Exception killed the thread. 
 However this understanding was wrong as explained by a Confluent Engineer.
    
    ![Correct understanding](/assets/kafka-issue/uncaught-exception-handler-correct-understanding.png)
-   
-<em>Need to frame the above in a better way</em>
 
+We had to, had to figure a way out!🙏🏻
+   
 Before we proceed further, let's understand a few relevant kafka terminologies.
 #### Parition Leaders and Replicas
 Every partition, in ideal conditions is assigned a broker that acts as a leader and has zero or more brokers which 
@@ -58,7 +57,7 @@ and if a heartbeat isn't received with a certain interval, then the zookeeper as
 (This interval is governed by ZOO_TICK_TIME which by default is 2000 ms) So, if the controller doesn't send a heartbeat
 within ZOO_TICK_TIME ms, a controller election takes place.
 
-Also, the controller job description includes
+Also, the controller's job description includes
  * Monitoring the health of all the other brokers in the cluster.
  * Mediate the leader election for a partition and announces this to the replicas.
  
@@ -68,11 +67,15 @@ isn't functional because of some failures, a new leader is selected from the in 
 Zookeeper is the one who gets to know about these failures which in turn signals them to the controller 
 which then mediates an election.
 
+#### Preferred Election
+Preferred election is an election mediated by the controller to fix the uneven distribution of leaders for the topic. 
+You could read more about it [here](https://medium.com/@mandeep309/preferred-leader-election-in-kafka-4ec09682a7c4)
+
 ### What did we do next?
 
-Our team, ziggurat had now entered the scene and we started discussing/debugging why this could be happening. Since we 
-are the ones who build solutions of top of kafka's library, which is then used by the consumers, our finding and fixes
-were necessary. 😅
+Our team ziggurat had now entered the scene and we started discussing/debugging why this could be happening. Since we 
+are the ones who build solutions on top of kafka's library, which is then used by the consumers, our finding and fixes
+were extremely crucial! 😅
 
 We started off going through the logs for the time intervals in which the consumers went down. Upon rigorous monitoring of 
 all the affected consumers, we found out two prominent exceptions. 
@@ -97,19 +100,27 @@ the controller and the broker. This leads to the broker getting kicked out the c
 A leader re-election takes place on those partitions for which the broker was a leader creating a leader imbalance in the cluster.
 Once the broker is back up, it rejoins the cluster and the controller triggers a preferred election.
 
-Preferred election is an election mediated by the controller to fix the uneven distribution of leaders for the topic. You could read more about it [here](https://medium.com/@mandeep309/preferred-leader-election-in-kafka-4ec09682a7c4)
-
 If this broker has a very high throughput, the preferred election leads to a delay in recovery and can cause the partition to be leader less
 for several minutes. This has also been discussed in [KAFKA-4084](https://issues.apache.org/jira/browse/KAFKA-4084)
 This would also lead to timeouts happening on consumer threads consuming from that partition. 
 
-<em>TODO Add graphs from hermes timeboard.</em>
+As you can see in the picture below, a maintenance had happened on g-gojek-id-mainstream-kafka-a-13 (Leader count dropped considerably)
+
+The leader count went down at 12:36 and a recovery started by 12:40
+During this period, a lot of consumers experienced a lag and a few didn't recover depending on how long it took for their topic partition to
+overcome the imbalance.
+
+<div class="single-picture-container">
+  <div class="grid-item">
+<img src="/assets/kafka-issue/broker-reelection-recovery-time.png" class="center" style="width:100%; height:100%"/>
+<figcaption>Leader count chart, which is a summation of all partitions.</figcaption>
+</div></div>
 
 So, the next task in hand was to reproduce it on local or integration, so that we could try various kafka configuration settings in order to
 mitigate the issue. 
 Only caveat was that we might not get accurate results because of the variance in load when compared to production.
 
-To speed up, we divided our team into two 
+To speed up, we split into two pods
 1. The first one focused on reproducing the issue on the local machine
 1. The second one put all their efforts on reading through the documentation to figure out the best suited kafka consumer 
 configurations which could help.
@@ -126,9 +137,9 @@ Steps and observations:
 * After a while, stopped the container which was running kafka.
 * Observed DisconnectException and TimeoutException in the consumer logs but also observed that the stream thread 
 didn't die even after waiting for 20 minutes. 
-1. After bringing kafka back, the actor started consuming by itself.
-Also found a similar kafka issue [KAFKA-3468](https://issues.apache.org/jira/browse/KAFKA-3468) which tells that consumers do not fail on such scenarios
-and instead try to fetch the metadata in a loop, forever. 
+* After bringing the broker back, the consumer started consuming messages by itself.
+Also found a similar kafka issue [KAFKA-3468](https://issues.apache.org/jira/browse/KAFKA-3468) which tells that 
+consumers do not fail on such scenarios and rather try to fetch the metadata in a loop, forever. 
 
 Because we didn't see any issue with the above setup, we thought of moving on to something better. 
 Since our production environment runs a kafka cluster, we decided to go ahead with similar setup. 
@@ -138,23 +149,30 @@ Figuring out the details of setting up a cluster locally, sure took some time, b
 
 To reproduce the issue, we just needed to ensure the partition had no leader for a while and re-election couldn't took place.
 
-Now, came in the eureka moment! 😎
 So basically, if the leader is down and the controller is not able to elect a new leader, the partition would become 
 leader less which in turn could lead to Timeout Exceptions on the consumer assigned to that partition.
+
 The immediate question was how does a controller know when it has to trigger an election? Like we discussed above, zookeeper is
 the one that signals it to controller. Hence the next step was to block communications from zookeeper to controller.
 Blocking the communication is as simple as adding an IP table rule in the controller to block all requests from zookeeper.
 
-`iptables -A INPUT -s <zookeeper_ip> -j DROP`
+But you might say that if zookeeper isn't able to reach the controller, it would elect a new one, right? 
 
-But you might say that if zookeeper isn't able to reach the controller, it elects a new one. There's a catch here, though.
-ZOO_TICK_TIME! If this is increased to a very huge number, then even zookeeper wouldn't know if the controller isn't functional and
-hence new one wouldn't be elected.
+Well, you might have figured an answer to this already.
 
+Yes you are right, it's ZOO_TICK_TIME! If this configuration is increased to a very huge number, then even 
+zookeeper wouldn't know if the controller isn't functional and hence new one wouldn't be elected. Smart, right? 😆 
+
+<div class="single-picture-container">
+  <div class="grid-item">
+    <img class="animated-gif" src="https://media.giphy.com/media/3o7WIMXk4MgSgWF1xC/giphy.gif" width="50%" height="100%"/>
+    <figcaption>The eureka moment 😎</figcaption>
+  </div>
+</div>
+  
 Because we cannot have high throughput like production on the local environment, going the preferred election route wasn't possible.
 
 Hence, to reproduce the issue, the above idea made more sense and was implemented in the following fashion.
-
 * Create a cluster using the docker setup (ensuring ZOO_TICK_TIME in zookeeper configuration to be of a very high value)
 * Create a topic with 3 partitions and 12 replica count using the kafka-topics
 `./kafka-topics.sh --create --topic topic-x --bootstrap-server localhost:9092 --replication-factor 3 --partitions 12`
@@ -185,9 +203,9 @@ Since DisconnectException and TimeoutException are both, a type of Retryable err
 we thought configuring retries to a high value would solve it. 
 
 `session.timeout.ms` - The timeout used to detect client failures when using Kafka's group management facility. 
-The client sends periodic heartbeats to indicate its liveness to the broker.
+The client sends periodic heartbeats to indicate its aliveness to the broker.
 If no heartbeats are received by the broker before the expiration of this session timeout, 
-then the broker will remove this client from the group and initiate a rebalance. 
+then the broker will remove this client from the group and initiate a re-balance. 
 
 `default.api.timeout.ms` - This configuration is used as the default timeout for all client operations 
 that do not specify a timeout parameter. Since we didn't find any configuration with respect to offset commit timeout,
@@ -213,8 +231,13 @@ Knowing that default.api.timeout.ms worked, we tested it out on integration and 
 Apart from figuring out the right consumer config, we realized that since live migration is the one creating all the fuss,
 we also updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
 to be true. Shutdown and restart would mean a faster preferred election.
-Since Kafka is and highly available setup, one broker shutting down for a few minutes wouldn't have much effect.
+Since Kafka is and highly available setup, one broker being down for a few minutes wouldn't have much effect.
 
+### The positives
+
+The last week of February was THE WEEK where we got to learn a lot about kafka. This was also the week, were the whole team
+paired together all the time which in turn contributed to strengthening the bond. 
+Kudos to such production issues!! 🤪
 
 ## Helpful Pages
 
