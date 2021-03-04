@@ -235,6 +235,9 @@ Apart from figuring out the right consumer config, we realized that since live m
 we also updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
 to be true. Shutdown and restart would mean a faster preferred election.
 Since Kafka is and highly available setup, one broker being down for a few minutes wouldn't have much effect.
+
+Thus after a week of rigorous effort, we were able to figure out a viable solution!
+
 ### The positives
 The last week of February was THE WEEK where we got to learn a lot about kafka. This was also the week, were the whole team
 paired together all the time which in turn contributed to strengthening the bond. 
