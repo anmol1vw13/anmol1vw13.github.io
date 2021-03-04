@@ -43,7 +43,7 @@ However this understanding was wrong as explained by a Confluent Engineer.
 
 We had to, had to figure a way out!🙏🏻
    
-Before we proceed further, let's understand a few relevant kafka terminologies.
+But, before we proceed further, let's understand a few relevant kafka terminologies.
 #### Parition Leaders and Replicas
 Every partition, in ideal conditions is assigned a broker that acts as a leader and has zero or more brokers which 
 act as replicas, governed by the replication factor. The leader handles all read and write requests for the partition
@@ -72,7 +72,6 @@ Preferred election is an election mediated by the controller to fix the uneven d
 You could read more about it [here](https://medium.com/@mandeep309/preferred-leader-election-in-kafka-4ec09682a7c4)
 
 ### What did we do next?
-
 Our team ziggurat had now entered the scene and we started discussing/debugging why this could be happening. Since we 
 are the ones who build solutions on top of kafka's library, which is then used by the consumers, our finding and fixes
 were extremely crucial! 😅
@@ -80,19 +79,19 @@ were extremely crucial! 😅
 We started off going through the logs for the time intervals in which the consumers went down. Upon rigorous monitoring of 
 all the affected consumers, we found out two prominent exceptions. 
 * DisconnectException
-```
-org.apache.kafka.clients.FetchSessionHandler:handleError: 
-[Consumer clientId=application_id_offset_reset_86be-ea18bbcf-c774-40e3-ba21-aedda1d16004-StreamThread-8-consumer, 
-groupId=application_id_offset_reset_86be] Error sending fetch request (sessionId=91025901, epoch=1235409) to node 1: 
-org.apache.kafka.common.errors.DisconnectException.
-```
+    <pre class="block-code-pre">
+    <code class="block-code-code">org.apache.kafka.clients.FetchSessionHandler:handleError: 
+      [Consumer clientId=application_id_offset_reset_86be-ea18bbcf-c774-40e3-ba21-aedda1d16004-StreamThread-8-consumer, 
+      groupId=application_id_offset_reset_86be] Error sending fetch request (sessionId=91025901, epoch=1235409) to node 1: 
+      org.apache.kafka.common.errors.DisconnectException.</code>
+    </pre>
 * TimeoutException
-```
-org.apache.kafka.common.errors.TimeoutException: Timeout of 60000ms expired before successfully committing offsets 
-{topic-5=OffsetAndMetadata{offset=1126387, leaderEpoch=null, metadata=''}}
-```
-    For consumers whose stream threads died, we saw that the Timeout exception came up for a each partition, after which 
-    the thread goes into ERROR state.
+  <pre class="block-code-pre">
+  <code class="block-code-code">org.apache.kafka.common.errors.TimeoutException: Timeout of 60000ms expired before successfully committing offsets 
+    {topic-5=OffsetAndMetadata{offset=1126387, leaderEpoch=null, metadata=''}}</code>
+  </pre>
+  For consumers whose stream threads died, we saw that the Timeout exception came up for a each partition, after which 
+  the thread goes into ERROR state.
     
 By now we also understood a little, how and why a live migration could cause this. 
 A live migration was observed to have caused network failures on the broker which results in communication failure between
@@ -175,17 +174,21 @@ Because we cannot have high throughput like production on the local environment,
 Hence, to reproduce the issue, the above idea made more sense and was implemented in the following fashion.
 * Create a cluster using the docker setup (ensuring ZOO_TICK_TIME in zookeeper configuration to be of a very high value)
 * Create a topic with 3 partitions and 12 replica count using the kafka-topics
-`./kafka-topics.sh --create --topic topic-x --bootstrap-server localhost:9092 --replication-factor 3 --partitions 12`
-* Produce messages into topic-x
+    <pre class="block-code-pre">
+    <code class="block-code-code">./kafka-topics.sh --create --topic topic-x --bootstrap-server localhost:9092 --replication-factor 3 --partitions 12</code></pre>
+* Produce messages into `topic-x`
 * Run a consumer consuming from the topic specified above and see that it’s consuming the messages
 * Find the kafka controller’s broker id by running the following command using zookeeper shell 
-`./zookeeper-shell.sh localhost:2181 << get /controller`
+    <pre class="block-code-pre">
+    <code class="block-code-code">./zookeeper-shell.sh localhost:2181 << get /controller</code></pre>
 * Exec into the broker's container found above and put a rule in the iptables to not accept requests from zookeeper
-   `iptables -A INPUT -s <zookeeper_ip> -j DROP`
+   <pre class="block-code-pre">
+       <code class="block-code-code">iptables -A INPUT -s <zookeeper_ip> -j DROP</zookeeper_ip></code></pre>
 * Observe that the new controller isn't elected even after waiting for 5 mins. Kudos to high value of ZOO_TICK_TIME.
 * Find a partition the leader of which isn’t the controller. This can be found using kafka-topics
-`./kafka-topics.sh --describe --topic topic-x --bootstrap-server localhost:9091`
-* Stop that broker using docker stop <container_id>  (Container Id can be figured out using docker ps -a)`
+    <pre class="block-code-pre">
+    <code class="block-code-code">./kafka-topics.sh --describe --topic topic-x --bootstrap-server localhost:9091</code></pre>
+* Stop that broker using docker stop <container_id>  (Container Id can be figured out using `docker ps -a`)
 * Keep monitoring the actor’s logs. We’ll see disconnect & offset commit timeout exceptions. 
 In about 5-10 mins the streams will shutdown.
 * Getting the leader back up didn't restart the message consumption either.
@@ -232,9 +235,7 @@ Apart from figuring out the right consumer config, we realized that since live m
 we also updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
 to be true. Shutdown and restart would mean a faster preferred election.
 Since Kafka is and highly available setup, one broker being down for a few minutes wouldn't have much effect.
-
 ### The positives
-
 The last week of February was THE WEEK where we got to learn a lot about kafka. This was also the week, were the whole team
 paired together all the time which in turn contributed to strengthening the bond. 
 Kudos to such production issues!! 🤪

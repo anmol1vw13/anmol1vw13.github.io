@@ -70,9 +70,8 @@ which was going to be launched soon.</p>
 <br/>I chose <a href="https://console.cloud.google.com/">GCP</a> to be the cloud platform.
   You could follow <a href="https://medium.com/google-cloud/creating-a-virtual-machine-in-google-cloud-platform-ec2d74dbbab0">this</a> article to get it done.<br/>
   Once the machine was up, I cloned the <a href="https://github.com/anmol1vw13/scripts-py">repository</a>.<br/> The only thing left was to get the API Keys and set up a <a href="https://www.liquidweb.com/kb/create-a-cron-task-in-ubuntu-16-04/">cron</a> which ran every 2 minutes.</p>
-<code style="padding-bottom: 5px; padding-top: 5px">
-  */2 * * * * env MOBILE_NUMBER="#mobile_number" CALL_ME_BOT_KEY="#call_me_bot_key" WIRE_PUSHER_KEY="#wire_pusher_key" python /scripts-py/nikeshoe_alerter.py >> /log.py
-</code>
+<pre class="block-code-pre"><code class="block-code-code">*/2 * * * * env MOBILE_NUMBER="#mobile_number" CALL_ME_BOT_KEY="#call_me_bot_key" WIRE_PUSHER_KEY="#wire_pusher_key" python /scripts-py/nikeshoe_alerter.py >> /log.py
+</code></pre>
 
 <p style="padding-top: 15px;">All I now had to do was take a back seat and wait for the notification to arrive. 👻</p>
 <p>Meanwhile, I got her home address from her sister and asked her to keep it a surprise. Not a single word! Sssshhhhhh 🤫</p>
