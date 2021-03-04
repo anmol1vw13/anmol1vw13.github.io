@@ -136,7 +136,7 @@ Since we already had a docker setup of 1 kafka broker and 1 zookeeper, we though
 Steps and observations:
 * Ran the kafka-zookeeper docker setup locally.
 * Produced messages into kafka.
-* Ran a consumer locally, with bootstrap-server pointed to local kafka/
+* Ran a consumer locally, with bootstrap-server pointed to local kafka.
 * Observed that the consumer started message consumption.
 * After a while, stopped the container which was running kafka.
 * Observed DisconnectException and TimeoutException in the consumer logs but also observed that the stream thread 
