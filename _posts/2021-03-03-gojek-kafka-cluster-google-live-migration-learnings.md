@@ -246,7 +246,7 @@ Knowing that default.api.timeout.ms worked, we tested it out on integration and 
 Apart from figuring out the right consumer config, we realized that since live migration is the one creating all the fuss,
 we updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
 to be true. Shutdown and restart would mean a faster preferred election.
-Since Kafka is and highly available setup, one broker being down for a few minutes wouldn't have much effect.
+Since Kafka is an highly available setup, one broker being down for a few minutes will not have much effect.
 
 Thus after a week of rigorous effort, we were FINALLY able to figure out a viable solution!
 
