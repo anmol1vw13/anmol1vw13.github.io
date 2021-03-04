@@ -108,11 +108,11 @@ If this broker has a very high throughput, the preferred election leads to a del
 for several minutes. This has also been discussed in [KAFKA-4084](https://issues.apache.org/jira/browse/KAFKA-4084)
 This would also lead to timeouts happening on consumer threads consuming from that partition. 
 
-As you can see in the picture below, a maintenance had happened on g-gojek-id-mainstream-kafka-a-13 (Leader count dropped considerably)
+As you can see in the picture below, a maintenance had happened on `kafka-broker-13` (Leader count dropped considerably)
 
-The leader count went down at 12:36 and a recovery started by 12:40
-During this period, a lot of consumers experienced a lag and a few didn't recover depending on how long it took for their topic partition to
-overcome the imbalance.
+The leader count went down at 12:36 and a recovery started by 12:40.
+During this period, a lot of consumers experienced lag and a few didn't recover. The recovery was correlated to
+how long it took for their topic partition which was lead by `kafka-broker-13` to overcome the imbalance.
 
 <div class="single-picture-container">
   <div class="grid-item">
@@ -124,7 +124,7 @@ So, the next task in hand was to reproduce it on local or integration, so that w
 mitigate the issue. 
 Only caveat was that we might not get accurate results because of the variance in load when compared to production.
 
-To speed up, we split into two pods
+To speed up, we split ourselves into two pods
 * The first one focused on reproducing the issue on the local machine
 * The second one put all their efforts on reading through the documentation to figure out the best suited kafka consumer 
 configurations which could help.
