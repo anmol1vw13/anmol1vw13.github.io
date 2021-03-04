@@ -197,7 +197,7 @@ In about 5-10 mins the streams will shutdown.
 
 ### Resolution
 
-Let's go through all the configurations that the other team believed this issue could be solved with.
+Let's go through all the configurations that the second pod believed this issue could be solved with.
 
 * retries
 * session.timeout.ms
