@@ -21,8 +21,9 @@ they figured out migration of kafka broker(s) done by google to be the common ev
 
 This wasn't a normal migration and rather a [live migration](https://cloud.google.com/compute/docs/instances/live-migration), 
 wherein the virtual machine instance is kept running and it is live migrated to another host on the same zone 
-instead of requiring the VM to be rebooted. This article (https://blog.doit-intl.com/how-live-is-google-compute-engine-live-migration-f875e96ba923)
-has more insights on live migration and the lag that takes place because of it.
+instead of requiring the VM to be rebooted. 
+This [article](https://blog.doit-intl.com/how-live-is-google-compute-engine-live-migration-f875e96ba923) has more insights 
+on live migration and the lag that takes place because of it.
 
 Produce failures were of the following type
 
