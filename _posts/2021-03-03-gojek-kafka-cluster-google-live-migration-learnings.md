@@ -231,7 +231,7 @@ this config didn't help at all.
 `default.api.timeout.ms` - We observed that if the value of this config is greater than the time it takes for the cluster to stabilize, the streams
 do not die and start consuming messages once things come back to normal.
 
-Knowing that default.api.timeout.ms worked, we tested it out on integration and intimated all the stakeholders about it.
+Knowing that default.api.timeout.ms worked, we tested it out on integration and intimated all the stakeholders about it. Hurray!!
 
 Apart from figuring out the right consumer config, we realized that since live migration is the one creating all the fuss,
 we also updated the [migration policy](https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options#schedulingoptions) from migrateOnHostMaintenance to terminateOnHostMaintenance and also set compute.instances.automaticRestart
