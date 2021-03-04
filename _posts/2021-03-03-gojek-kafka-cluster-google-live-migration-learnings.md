@@ -241,8 +241,10 @@ Since Kafka is and highly available setup, one broker being down for a few minut
 Thus after a week of rigorous effort, we were FINALLY able to figure out a viable solution!
 
 ### The positives
-The last week of February was THE WEEK where we got to learn a lot about kafka. This was also the week, were the whole team
-paired together all the time which in turn contributed to strengthening the bond. 
+The last week of February was THE WEEK where we got to learn a lot about kafka. 
+
+This was also the week, were the whole team paired together all the time which in turn contributed to strengthening the bond. 
+
 Kudos to such production issues!! 🤪
 
 ## Helpful Pages
