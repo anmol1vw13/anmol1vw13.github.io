@@ -178,8 +178,8 @@ Because we cannot have high throughput like production on the local environment,
 
 Hence, to reproduce the issue, implementing the above idea made more sense.
 
-The implementation makes use of [kafka-cli-tool](https://docs.cloudera.com/documentation/kafka/latest/topics/kafka_command_line.html) 
-to talk to kafka.
+Note: The implementation makes use of [kafka-cli-tool](https://docs.cloudera.com/documentation/kafka/latest/topics/kafka_command_line.html) 
+to talk to zookeeper and kafka.
 
 Following are the steps and observations
 * Create a cluster using the docker-compose file mentioned above, 
