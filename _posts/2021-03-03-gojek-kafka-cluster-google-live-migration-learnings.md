@@ -26,6 +26,12 @@ This [article](https://blog.doit-intl.com/how-live-is-google-compute-engine-live
 on live migration and the lag that takes place because of it.
 
 Produce failures were of the following type
+<pre class="block-code-pre">
+<code class="block-code-code">failed to publish message with exception with topic xxxx 
+java.util.concurrent.ExecutionException: org.apache.kafka.common.errors.NotLeaderForPartitionException: 
+This server is not the leader for that topic-partition.
+</code></pre>
+
 
 While, there were two types of consumers facing the lag
 * Ones which auto-recovered after a while.
