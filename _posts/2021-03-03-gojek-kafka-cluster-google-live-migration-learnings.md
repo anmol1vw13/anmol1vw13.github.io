@@ -77,7 +77,7 @@ Preferred election is an election mediated by the controller to fix the uneven d
 You could read more about it [here](https://medium.com/@mandeep309/preferred-leader-election-in-kafka-4ec09682a7c4)
 
 ### What did we do next?
-Our team ziggurat had now entered the scene and we started discussing/debugging why this could be happening. Since we 
+Our team [ziggurat](https://ziggurat.dev/) had now entered the scene and we started discussing/debugging why this could be happening. Since we 
 are the ones who build solutions on top of kafka's library, which is then used by the consumers, our finding and fixes
 were extremely crucial! 😅
 
