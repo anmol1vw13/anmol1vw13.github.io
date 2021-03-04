@@ -37,8 +37,8 @@ However, there were a few speculations as to how a misbehaving broker could caus
 using kafka client less than 2.3.0 could be facing issues because of it. Refer [KAFKA-7181](https://issues.apache.org/jira/browse/KAFKA-7181)
 * Consumers did not implement an UncaughtExceptionHandler and a encountering a Timeout Exception killed the thread. 
 However this understanding was wrong as explained by a Confluent Engineer.
-   
-   ![Correct understanding](/assets/kafka-issue/uncaught-exception-handler-correct-understanding.png)
+
+![Correct understanding](/assets/kafka-issue/uncaught-exception-handler-correct-understanding.png)
 
 We had to, had to figure a way out!🙏🏻
    
@@ -170,7 +170,9 @@ zookeeper wouldn't know if the controller isn't functional and hence new one wou
   
 Because we cannot have high throughput like production on the local environment, going the preferred election route wasn't possible.
 
-Hence, to reproduce the issue, the above idea made more sense and was implemented via the following steps.
+Hence, to reproduce the issue, implementing the above idea made more sense.
+
+Following are the steps and observations
 * Create a cluster using the docker-compose file mentioned above, 
   ensuring `ZOO_TICK_TIME` in zookeeper configuration to be of a very high value, say 600000
 * Create a topic with 3 partitions and 12 replica count using the kafka-topics
