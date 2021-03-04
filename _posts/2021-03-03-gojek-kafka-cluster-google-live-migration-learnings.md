@@ -32,8 +32,7 @@ java.util.concurrent.ExecutionException: org.apache.kafka.common.errors.NotLeade
 This server is not the leader for that topic-partition.
 </code></pre>
 
-
-While, there were two types of consumers facing the lag
+On the customer front, there were two types of consumers facing the lag
 * Ones which auto-recovered after a while.
 * Ones the streams of which shut down and a recovery meant restarting the service.
 
