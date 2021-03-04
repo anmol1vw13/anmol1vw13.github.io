@@ -11,7 +11,6 @@ tags:
 - gojek
 - draft
 ---
-
 Recently, at Gojek, we faced a very peculiar issue related to kafka.
 
 A lot of customers reported seeing untimely failures on producers and lag on consumers. 
@@ -28,15 +27,15 @@ has more insights on live migration and the lag that takes place because of it.
 Produce failures were of the following type
 
 While, there were two types of consumers facing the lag
-1. Ones which auto-recovered after a while.
-1. Ones the streams of which shut down and a recovery meant restarting the service.
+* Ones which auto-recovered after a while.
+* Ones the streams of which shut down and a recovery meant restarting the service.
 
 Why and how a live migration would be the culprit was still an big question mark! 👀
 
 However, there were a few speculations as to how a misbehaving broker could cause lags in consumers
-1. Streams were stuck in re-balancing because one of the stream thread died and consumers 
+* Streams were stuck in re-balancing because one of the stream thread died and consumers 
 using kafka client less than 2.3.0 could be facing issues because of it. Refer [KAFKA-7181](https://issues.apache.org/jira/browse/KAFKA-7181)
-1. Consumers did not implement an UncaughtExceptionHandler and a encountering a Timeout Exception killed the thread. 
+* Consumers did not implement an UncaughtExceptionHandler and a encountering a Timeout Exception killed the thread. 
 However this understanding was wrong as explained by a Confluent Engineer.
    
    ![Correct understanding](/assets/kafka-issue/uncaught-exception-handler-correct-understanding.png)
@@ -120,8 +119,8 @@ mitigate the issue.
 Only caveat was that we might not get accurate results because of the variance in load when compared to production.
 
 To speed up, we split into two pods
-1. The first one focused on reproducing the issue on the local machine
-1. The second one put all their efforts on reading through the documentation to figure out the best suited kafka consumer 
+* The first one focused on reproducing the issue on the local machine
+* The second one put all their efforts on reading through the documentation to figure out the best suited kafka consumer 
 configurations which could help.
 
 ### Local Reproduction 
@@ -159,7 +158,7 @@ But you might say that if zookeeper isn't able to reach the controller, it would
 
 Well, you might have figured an answer to this already.
 
-Yes you are right, it's ZOO_TICK_TIME! If this configuration is increased to a very huge number, then even 
+Yes you are right, it's `ZOO_TICK_TIME`! If this configuration is increased to a huge number, then even 
 zookeeper wouldn't know if the controller isn't functional and hence new one wouldn't be elected. Smart, right? 😆 
 
 <div class="single-picture-container">
@@ -171,8 +170,9 @@ zookeeper wouldn't know if the controller isn't functional and hence new one wou
   
 Because we cannot have high throughput like production on the local environment, going the preferred election route wasn't possible.
 
-Hence, to reproduce the issue, the above idea made more sense and was implemented in the following fashion.
-* Create a cluster using the docker setup (ensuring ZOO_TICK_TIME in zookeeper configuration to be of a very high value)
+Hence, to reproduce the issue, the above idea made more sense and was implemented via the following steps.
+* Create a cluster using the docker-compose file mentioned above, 
+  ensuring `ZOO_TICK_TIME` in zookeeper configuration to be of a very high value, say 600000
 * Create a topic with 3 partitions and 12 replica count using the kafka-topics
     <pre class="block-code-pre">
     <code class="block-code-code">./kafka-topics.sh --create --topic topic-x --bootstrap-server localhost:9092 --replication-factor 3 --partitions 12</code></pre>
