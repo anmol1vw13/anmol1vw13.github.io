@@ -183,7 +183,7 @@ to talk to zookeeper and kafka.
 
 Following are the steps and observations
 * Create a cluster using the docker-compose file mentioned above, 
-  ensuring `ZOO_TICK_TIME` in zookeeper configuration to be of a very high value, say 600000
+  ensuring `ZOO_TICK_TIME` in zookeeper configuration is a high value, say 600000 (10 minutes).
 * Create a topic with 3 partitions and 12 replica count using kafka-topics
     <pre class="block-code-pre">
     <code class="block-code-code">./kafka-topics.sh --create --topic topic-x --bootstrap-server localhost:9092 --replication-factor 3 --partitions 12</code></pre>
