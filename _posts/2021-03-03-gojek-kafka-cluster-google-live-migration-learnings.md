@@ -117,9 +117,9 @@ how long it took for their topic partition which was lead by `kafka-broker-13` t
 <div class="single-picture-container">
   <div class="grid-item">
 <img src="/assets/kafka-issue/broker-reelection-recovery-time.png" class="center" style="width:100%; height:100%"/>
-<figcaption>Leader count chart, which is a summation of all partitions.</figcaption>
+<figcaption>Leader count chart, which is a summation of all partitions from all the topics in the cluster.</figcaption>
 </div></div>
-
+<br/>
 So, the next task in hand was to reproduce it on local or integration, so that we could try various kafka configuration settings in order to
 mitigate the issue. 
 Only caveat was that we might not get accurate results because of the variance in load when compared to production.
