@@ -178,10 +178,13 @@ Because we cannot have high throughput like production on the local environment,
 
 Hence, to reproduce the issue, implementing the above idea made more sense.
 
+The implementation makes use of [kafka-cli-tool](https://docs.cloudera.com/documentation/kafka/latest/topics/kafka_command_line.html) 
+to talk to kafka.
+
 Following are the steps and observations
 * Create a cluster using the docker-compose file mentioned above, 
   ensuring `ZOO_TICK_TIME` in zookeeper configuration to be of a very high value, say 600000
-* Create a topic with 3 partitions and 12 replica count using the kafka-topics
+* Create a topic with 3 partitions and 12 replica count using kafka-topics
     <pre class="block-code-pre">
     <code class="block-code-code">./kafka-topics.sh --create --topic topic-x --bootstrap-server localhost:9092 --replication-factor 3 --partitions 12</code></pre>
 * Produce messages into `topic-x`
