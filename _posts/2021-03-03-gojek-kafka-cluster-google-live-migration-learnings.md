@@ -100,7 +100,8 @@ The leader count went down at 12:36, and a recovery started by 12:40. During thi
   </div>
 </div>
 <br/>
-So, the next task in hand was to reproduce it on local or integration, so that we could try various Kafka configuration settings in order to mitigate the issue. The only caveat was that we might not get accurate results because of the variance in load when compared to production.
+So, the next task in hand was to reproduce it on local or integration, in order to try various Kafka configuration settings in order to mitigate the issue. 
+The only caveat was that we might not get accurate results because of the variance in load when compared to production.
 
 To speed up, we split ourselves into two pods
 * The first one focused on reproducing the issue on the local machine
