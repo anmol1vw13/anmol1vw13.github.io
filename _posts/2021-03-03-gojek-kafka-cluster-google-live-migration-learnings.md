@@ -59,7 +59,7 @@ A controller is a broker. A cluster always has one controller present. In the ev
 a new controller for the cluster.  How does zookeeper do it?
 Zookeeper always expects heartbeats to be sent from the all the brokers in the cluster 
 and if a heartbeat isn't received with a certain interval, then the zookeeper assumes the broker to be non functional. 
-(This interval is governed by `ZOO_TICK_TIME` which by default is 2000 ms) So, if the controller doesn't send a heartbeat
+(This interval is governed by `ZOO_TICK_TIME` which by default is 2000 ms). So, if the controller doesn't send a heartbeat
 within the configured time, a controller re-election takes place and another broker is made the controller instead.
 
 Also, the controller's job description includes
