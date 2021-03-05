@@ -196,7 +196,7 @@ ensuring `ZOO_TICK_TIME` in zookeeper configuration is a high value, say 600000 
     <pre class="block-code-pre">
     <code class="block-code-code">iptables -A INPUT -s <zookeeper_ip> -j DROP</zookeeper_ip></code></pre>
 * Observe that the new controller isn't elected even after waiting for 5 minutes. Kudos to high value of ZOO_TICK_TIME.
-* Find a partition the leader of which isn’t the controller. This can be found using kafka-topics
+* Find a partition, the leader of which isn’t the controller. This can be found using kafka-topics
     <pre class="block-code-pre">
     <code class="block-code-code">./kafka-topics.sh --describe --topic topic-x --bootstrap-server localhost:9091</code></pre>
 * Stop that broker using docker stop <container_id>  (Container Id can be figured out using `docker ps -a`)
