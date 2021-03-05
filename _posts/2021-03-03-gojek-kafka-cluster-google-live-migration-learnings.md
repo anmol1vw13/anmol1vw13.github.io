@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Improving Kafka streams reliability by leveraging default-api-timeout-ms 
+title: Taking the Bull by the Horns - Improving Kafka streams reliability
 date: '2021-03-03T00:00:00.000-08:00'
 author: Anmol Vijaywargiya
 tags:
