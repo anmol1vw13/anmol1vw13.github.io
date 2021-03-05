@@ -55,13 +55,15 @@ Every partition, in ideal conditions, is assigned a broker that acts as a leader
 
 #### Controller
 A controller is a broker. A cluster always has one controller present. In the events of the controller going down, the zookeeper elects a new controller for the cluster. How does zookeeper do it? Zookeeper always expects heartbeats to be sent from all the brokers in the cluster and if a heartbeat isn't received with a certain interval, then the zookeeper assumes the broker to be non-functional. (This interval is governed by ZOO_TICK_TIME which by default is 2000 ms). So, if the controller doesn't send a heartbeat within the configured time, controller re-election takes place and another broker is made the controller instead.
+
 Also, the controller's job description includes
 * Monitoring the health of all the other brokers in the cluster.
 * Mediate the leader election for a partition and announces this to the replicas.
 
 #### Leader Election
 For a Kafka cluster to function properly, every partition needs to have a leader and in the events, this leader isn't functional because of some failures, a new leader is selected from the in-sync replica list Zookeeper is the one who gets to know about these failures which in turn signals them to the controller which then mediates an election.
-Preferred Election
+
+#### Preferred Election
 A preferred election is an election mediated by the controller to fix the uneven distribution of leaders for the topic. You could read more about it [here](https://medium.com/@mandeep309/preferred-leader-election-in-kafka-4ec09682a7c4)
 
 ### What did we do next?
