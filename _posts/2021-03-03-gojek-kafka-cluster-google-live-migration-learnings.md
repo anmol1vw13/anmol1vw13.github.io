@@ -9,6 +9,7 @@ tags:
 - kafka_cluster
 - zookeeper
 - gojek
+- offset commit timeout
 ---
 Recently, at Gojek, we faced a peculiar issue related to kafka.
 
