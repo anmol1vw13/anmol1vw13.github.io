@@ -70,9 +70,8 @@ to the configuration were done by the teams themselves, there were a lot of unkn
 To cater to this we decided to bucket the chef configuration into features thereby making it extendable to other actors as well. 
 These features are then used to extrapolate relevant recipes, tags and attributes which are passed on for infrastructure creation.
 
-Hence, in the recreation flow, we also have a check to understand whether the features recorded for the actor match the ones
-found on the existing nodes. 
-If they don't, recreation is not allowed to go through. If they do, infrastructure is recreated.
+Since the users have complete access to the underlying infrastructure, in the recreation flow, we also have a check to understand whether the features recorded for the actor with us match the ones
+found on the existing nodes. If they don't, recreation is not allowed to go through. If they do, infrastructure is recreated.
 
 The infrastructure set created although will not have any traffic flow through and will controlled using traffic regulation.
 
