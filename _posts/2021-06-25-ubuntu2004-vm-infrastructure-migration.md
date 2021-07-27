@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Draft] Making Actor's VM infrastructure reproducible!"
+title: "Making Actor's VM infrastructure reproducible!"
 date: '2021-07-21T00:00:00.000-08:00'
 author: Anmol Vijaywargiya
 tags:
@@ -59,8 +59,8 @@ The implementation was broken into 4 high level tasks.
 2. Listing of all available infrastructure sets.
 3. Regulation of traffic between infrastructure sets.
 4. Archival of infrastructure set(s)
-PS: An infrastructure set is a collection of VMs that were provisioned at the same time and have the same characteristics.
 
+PS: An infrastructure set is a collection of VMs that were provisioned at the same time and have the same characteristics.
 
 The main challenge here was to create an identical infrastructure set. 
 
@@ -78,12 +78,15 @@ The infrastructure set created although will not have any traffic flow through a
 Once the traffic regulation is complete and the traffic is on the recreated infra set, the user can then delete the infrastructure set
 which doesnot have any traffic.
 
+
 After the development was complete, we complete the infrastructure for all the actors in integration as well as production in a week's time.
+Listing below, the impact of our effort: 
+* Dev days saved: ~228
+* The total cost saved: ~$11.3k per month (VM infrastructure)
+* Potentially saved: ~$171k (on extended security support)
+* Truly zero downtime migration
+
 The whole process was seamless and we are now looking for extending this tool to other types of applications and other usecases as well.
-
-
-
-
 
 
 
